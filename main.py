@@ -4,8 +4,7 @@ import discord
 import os
 import random
 from replit import db
-import asyncio
-from cmd import cmd
+import response as res
 
 client = commands.Bot(command_prefix=".")
 
@@ -15,10 +14,6 @@ sheep = ["傻羊"]
 eee = ["睡覺", "烤羊", "1116"]
 starter_encouragements = ["咩咩背著羊娃娃", "Nooooo", "Wow!"]
 animal_sound = ["汪", "喵", "咩", "呱", "哞", "嘶", "嘎"]
-
-
-if "responding" not in db.keys():
-    db["responding"] = False
 
 
 #boot bot
@@ -63,7 +58,7 @@ async def on_message(message):
         await message.add_reaction("1116:668820651540480031")
 
     if msg.startswith("!inspire"):
-        quote = get_quote()
+        quote = res.get_quote()
         await message.channel.send(quote)
 
     options = starter_encouragements
@@ -75,13 +70,13 @@ async def on_message(message):
 
     if msg.startswith("!newc"):  #add new encourage msg
         encouraging_message = msg.split("!newc ", 1)[1]
-        update_encouragements(encouraging_message)
+        res.update_encouragements(encouraging_message)
         await message.channel.send("New encouraging message added.")
 
     if msg.startswith("!delc"):  #del exist encourage msg
         if "encouragements" in db.keys():
             index = int(msg.split("!delc ", 1)[1])
-            delete_encouragment(index)
+            res.delete_encouragment(index)
         await message.channel.send("Encourage message deleted.")
 
     if "doges" in db.keys():
@@ -92,13 +87,13 @@ async def on_message(message):
 
     if msg.startswith("!newd"):  #add new doge msg
         doge_message = msg.split("!newd ", 1)[1]
-        update_doges(doge_message)
+        res.update_doges(doge_message)
         await message.channel.send("New doge message added.")
 
     if msg.startswith("!deld"):  #del exist doge msg
         if "doges" in db.keys():
             dmsg = msg.split("!deld ", 1)[1]
-            delete_doge(dmsg)
+            res.delete_doge(dmsg)
         await message.channel.send("doge message deleted.")
 
     if msg.startswith("$list"):
@@ -106,16 +101,6 @@ async def on_message(message):
         if "encouragements" in db.keys():
             encouragements = db["encouragements"]
         await message.channel.send(encouragements)
-
-    if msg.startswith("$responding"):
-        value = msg.split("$responding ", 1)[1]
-
-        if value.lower() == "true":
-            db["responding"] = True
-            await message.channel.send("Responding is on.")
-        else:
-            db["responding"] = False
-            await message.channel.send("Responding is off.")
 
 
 # react roles
