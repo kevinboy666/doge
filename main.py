@@ -7,24 +7,35 @@ from replit import db
 import response as res
 
 client = commands.Bot(command_prefix=".")
-
+#detects
 sad_words = ["sad", "depressed", "unhappy", "angry", "miserable", "金莎", "大便"]
 dog = ["浪浪", "狗狗", "笨狗", "doge"]
 sheep = ["傻羊"]
 eee = ["睡覺", "烤羊", "1116"]
-starter_encouragements = ["咩咩背著羊娃娃", "Nooooo", "Wow!"]
+#moves
+
+
+#response
 animal_sound = ["汪", "喵", "咩", "呱", "哞", "嘶", "嘎"]
 
+starter_encouragements = ["咩咩背著羊娃娃", "Nooooo", "Wow!"]
 
 #boot bot
 @client.event
 async def on_ready():
-    await client.change_presence(activity=discord.Activity(
-        type=discord.ActivityType.listening, name="Susumu Hirasawa - Guts"))
     print('Logged in as')
     print(client.user.name)
-    print(client.user.id)
     print('------')
+    act=random.choice(["game", "streaming", "listenting", "watching"])
+    if act=="game":
+      await client.change_presence(activity=discord.Game("Mining Simulator"))
+    if act=="streaming":
+      await client.change_presence(activity=discord.Streaming(name="Reaction", url=''))
+    if act=="watching":
+      await client.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="MeMe"))
+    if act=="listenting":
+      await client.change_presence(activity=discord.Activity
+      (type=discord.ActivityType.listening, name="Susumu Hirasawa - Guts"))
 
 
 #detect msg
