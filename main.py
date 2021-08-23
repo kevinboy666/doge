@@ -9,7 +9,8 @@ from clock import checkTime
 
 client = commands.Bot(command_prefix=".")
 #detects
-sad_words = ["sad", "depressed", "unhappy", "angry", "miserable", "金莎", "大便"]
+sad_words = ["sad", "depressed", "unhappy", "miserable", "金莎"]
+taunt_words=["angry", "大便"]
 dog = ["浪浪", "狗狗", "笨狗", "doge"]
 sheep = ["傻羊"]
 _1116 = ["睡覺", "烤羊", "1116", "咩肉爐"]
