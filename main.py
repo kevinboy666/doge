@@ -11,14 +11,14 @@ client = commands.Bot(command_prefix=".")
 sad_words = ["sad", "depressed", "unhappy", "angry", "miserable", "金莎", "大便"]
 dog = ["浪浪", "狗狗", "笨狗", "doge"]
 sheep = ["傻羊"]
-eee = ["睡覺", "烤羊", "1116"]
+_1116 = ["睡覺", "烤羊", "1116", "咩肉爐"]
 #moves
-
 
 #response
 animal_sound = ["汪", "喵", "咩", "呱", "哞", "嘶", "嘎"]
 
 starter_encouragements = ["咩咩背著羊娃娃", "Nooooo", "Wow!"]
+
 
 #boot bot
 @client.event
@@ -26,16 +26,19 @@ async def on_ready():
     print('Logged in as')
     print(client.user.name)
     print('------')
-    act=random.choice(["game", "streaming", "listenting", "watching"])
-    if act=="game":
-      await client.change_presence(activity=discord.Game("Mining Simulator"))
-    if act=="streaming":
-      await client.change_presence(activity=discord.Streaming(name="Reaction", url=''))
-    if act=="watching":
-      await client.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="MeMe"))
-    if act=="listenting":
-      await client.change_presence(activity=discord.Activity
-      (type=discord.ActivityType.listening, name="Susumu Hirasawa - Guts"))
+    act = random.choice(["game", "streaming", "listenting", "watching"])
+    if act == "game":
+        await client.change_presence(activity=discord.Game("Mining Simulator"))
+    if act == "streaming":
+        await client.change_presence(
+            activity=discord.Streaming(name="Reaction", url=''))
+    if act == "watching":
+        await client.change_presence(activity=discord.Activity(
+            type=discord.ActivityType.watching, name="MeMe"))
+    if act == "listenting":
+        await client.change_presence(activity=discord.Activity(
+            type=discord.ActivityType.listening, name="Susumu Hirasawa - Guts")
+                                     )
 
 
 #detect msg
@@ -43,7 +46,7 @@ async def on_ready():
 async def on_message(message):
     if message.author == client.user:
         return
-    print("{} : {}" .format(message.author, message.content))  #msg log
+    print("{} : {}".format(message.author, message.content))  #msg log
     await client.process_commands(message)
 
     msg = message.content
@@ -65,7 +68,7 @@ async def on_message(message):
     if any(word in msg for word in sheep):
         await message.add_reaction("lul:671687629678313501")
 
-    if any(word in msg for word in eee):  #1116
+    if any(word in msg for word in _1116):
         await message.add_reaction("1116:668820651540480031")
 
     if msg.startswith("!inspire"):
