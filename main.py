@@ -5,6 +5,7 @@ import os
 import random
 from replit import db
 import response as res
+from clock import checkTime
 
 client = commands.Bot(command_prefix=".")
 #detects
@@ -15,7 +16,7 @@ _1116 = ["睡覺", "烤羊", "1116", "咩肉爐"]
 #moves
 
 #response
-animal_sound = ["汪", "喵", "咩", "呱", "哞", "嘶", "嘎"]
+animal_sound = ["汪", "喵", "呱", "哞", "嘶", "嘎"]
 
 starter_encouragements = ["咩咩背著羊娃娃", "Nooooo", "Wow!"]
 
@@ -50,14 +51,15 @@ async def on_message(message):
     await client.process_commands(message)
 
     msg = message.content
-    if msg.startswith(("汪")):
+    if any(word in msg for word in animal_sound):
         await message.channel.send(random.choice(animal_sound))
 
     if msg.startswith('7414'):
         await message.channel.send("<:cheem:862575383374725131>")
 
     if msg.startswith("咩"):
-        await message.channel.send(random.choice(["咩","咩肉爐"],weight=(90, 10))
+        out=random.choices(["咩", "咩肉爐"],weights=(80, 20))
+        await message.channel.send(out[0])
 
     if msg.startswith("<:cheem:862575383374725131>"):
         await message.add_reaction("cheem:862575383374725131")
@@ -163,4 +165,5 @@ async def on_raw_reaction_remove(payload):
 
 
 keep_alive()
+checkTime()
 client.run(os.getenv('TOKEN'))
