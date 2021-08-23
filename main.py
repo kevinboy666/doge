@@ -57,7 +57,7 @@ async def on_message(message):
         await message.channel.send("<:cheem:862575383374725131>")
 
     if msg.startswith("咩"):
-        await message.channel.send("咩")
+        await message.channel.send(random.choice(["咩","咩肉爐"],weight=(90, 10))
 
     if msg.startswith("<:cheem:862575383374725131>"):
         await message.add_reaction("cheem:862575383374725131")
