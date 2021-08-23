@@ -40,37 +40,6 @@ async def on_message(message):
     print("{} : {}" .format(message.author, message.content))  #msg log
     await client.process_commands(message)
 
-    #record chat (todo)
-    if message.content.startswith('record chat'):
-        with open('output.txt', 'a') as the_file:
-            async for log in client.logs_from(messagechannellimit=1000):
-                stringTime = log.timestamp.strftime("%Y-%m-%d %H:%M")
-                try:
-                    author = log.author
-                except:
-                    author = 'invalid'
-                message = str(log.content.encode("utf-8"))[2:-1]
-
-                template = '[{stringTime}] <{author}> {message}\n'
-                try:
-                    the_file.write(
-                        template.format(stringTime=stringTime,
-                                        author=author,
-                                        message=message))
-                except:
-                    author = log.author.discriminator
-                    the_file.write(
-                        template.format(stringTime=stringTime,
-                                        author=author,
-                                        message=message))
-                print(
-                    template.format(stringTime=stringTime,
-                                    author=author,
-                                    message=message)[:-1])
-    elif message.content.startswith('!sleep'):
-        await asyncio.sleep(5)
-        await client.send_message(message.channel, 'Done sleeping')
-
     msg = message.content
     if msg.startswith(("汪")):
         await message.channel.send(random.choice(animal_sound))
