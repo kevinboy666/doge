@@ -1,25 +1,28 @@
 from datetime import datetime
-import threading
 import pytz
-import asyncio
+from discord.ext import commands, tasks
 
+bot = commands.Bot(command_prefix=".")
 remaindays = 46
 
-async def checkTime(channel):
-    print(channel.is_nsfw())
-    await channel.edit(name="asdlkl")
-    # This function runs periodically every 1 second
-    threading.Timer(5, checkTime,args=[channel]).start()
+@tasks.loop(seconds=60)
+async def checkTime():
+    channel = bot.get_channel(879288777804251177)
     datetime_TW = datetime.now(pytz.timezone('Asia/Taipei'))
     current_time = datetime_TW.strftime("%H:%M")
     print("Current Time =", current_time)
 
-    if (current_time == '13:29'):  # check if matches with the desired time
+    if (current_time == '00:00'):  # check if matches with the desired time
         global remaindays
         chname=""
         if (remaindays > 0):
             remaindays -= 1
-            chname = "咩再" + str(remaindays) + "天單身23年"
+            chname = "🦙再" + str(remaindays) + "天單身23年"
         else:
-            chname = "恭喜咩單身23年"
+            chname = "🦙已經單身23年"
         await channel.edit(name=chname)
+
+@checkTime.before_loop
+async def before_checkTime():
+    print('waiting...')
+    await bot.wait_until_ready()
