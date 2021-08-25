@@ -1,55 +1,84 @@
 from keep_alive import keep_alive
-from discord.ext import commands
 import discord
+from discord.ext import commands, tasks
 import os
 import random
 from replit import db
 import response as res
-from clock import checkTime
+#import asyncio
+#from clock import checkTime
 
-client = commands.Bot(command_prefix=".")
+bot = commands.Bot(command_prefix=".")
 #detects
 sad_words = ["sad", "depressed", "unhappy", "miserable", "金莎"]
 taunt_words=["angry", "大便"]
 dog = ["浪浪", "狗狗", "笨狗", "doge"]
 sheep = ["傻羊"]
 _1116 = ["睡覺", "烤羊", "1116", "咩肉爐"]
-#moves
-
+#actives
+listen=["banana phone","Susumu Hirasawa - Guts"]
 #response
 animal_sound = ["汪", "喵", "呱", "哞", "嘶", "嘎"]
 
 starter_encouragements = ["咩咩背著羊娃娃", "Nooooo", "Wow!"]
 
 
+from datetime import datetime
+import pytz
+
+remaindays = 46
+@tasks.loop(seconds=60)
+async def checkTime():
+    channel = bot.get_channel(879288777804251177)
+    datetime_TW = datetime.now(pytz.timezone('Asia/Taipei'))
+    current_time = datetime_TW.strftime("%H:%M")
+    print("Current Time =", current_time)
+
+    if (current_time == '00:00'):  # check if matches with the desired time
+        global remaindays
+        chname=""
+        if (remaindays > 0):
+            remaindays -= 1
+            chname = "🦙再" + str(remaindays) + "天單身23年"
+        else:
+            chname = "🦙已經單身23年"
+        await channel.edit(name=chname)
+
+@checkTime.before_loop
+async def before_checkTime():
+    print('waiting...')
+    await bot.wait_until_ready()
+
+
 #boot bot
-@client.event
+@bot.event
 async def on_ready():
+    
     print('Logged in as')
-    print(client.user.name)
+    print(bot.user.name)
     print('------')
     act = random.choice(["game", "streaming", "listenting", "watching"])
     if act == "game":
-        await client.change_presence(activity=discord.Game("Mining Simulator"))
+        await bot.change_presence(activity=discord.Game("Mining Simulator"))
     if act == "streaming":
-        await client.change_presence(
+        await bot.change_presence(
             activity=discord.Streaming(name="Reaction", url=''))
     if act == "watching":
-        await client.change_presence(activity=discord.Activity(
+        await bot.change_presence(activity=discord.Activity(
             type=discord.ActivityType.watching, name="MeMe"))
     if act == "listenting":
-        await client.change_presence(activity=discord.Activity(
-            type=discord.ActivityType.listening, name="Susumu Hirasawa - Guts")
-                                     )
+        await bot.change_presence(activity=discord.Activity(
+            type=discord.ActivityType.listening, name=random.choice(listen)))
+
 
 
 #detect msg
-@client.event
+@bot.event
 async def on_message(message):
-    if message.author == client.user:
+    if message.author == bot.user:
         return
     print("{} : {}".format(message.author, message.content))  #msg log
-    await client.process_commands(message)
+    await bot.process_commands(message)
 
     msg = message.content
     if any(word in msg for word in animal_sound):
@@ -121,12 +150,12 @@ async def on_message(message):
 
 
 # react roles
-@client.event
+@bot.event
 async def on_raw_reaction_add(payload):
     message_id = payload.message_id
     if message_id == 869105815301271572:
         guild_id = payload.guild_id
-        guild = discord.utils.find(lambda g: g.id == guild_id, client.guilds)
+        guild = discord.utils.find(lambda g: g.id == guild_id, bot.guilds)
 
         if payload.emoji.name == "cheem":
             role = discord.utils.get(guild.roles, name="doge")
@@ -144,12 +173,12 @@ async def on_raw_reaction_add(payload):
             print("member not found")
 
 
-@client.event
+@bot.event
 async def on_raw_reaction_remove(payload):
     message_id = payload.message_id
     if message_id == 869105815301271572:
         guild_id = payload.guild_id
-        guild = discord.utils.find(lambda g: g.id == guild_id, client.guilds)
+        guild = discord.utils.find(lambda g: g.id == guild_id, bot.guilds)
 
         if payload.emoji.name == "cheem":
             role = discord.utils.get(guild.roles, name="doge")
@@ -164,7 +193,8 @@ async def on_raw_reaction_remove(payload):
         else:
             print("member not found")
 
+  
+checkTime.start()
 
 keep_alive()
-checkTime()
-client.run(os.getenv('TOKEN'))
+bot.run(os.getenv('TOKEN'))
