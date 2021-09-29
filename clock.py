@@ -1,27 +1,29 @@
-from datetime import datetime
+from datetime import datetime, date
 import pytz
 from discord.ext import commands, tasks
 
 bot = commands.Bot(command_prefix=".")
-remaindays = 45
+ch_id=879288777804251177
+sheepbd=date(2021, 10, 11)
 
 @tasks.loop(seconds=60)
 async def checkTime():
-    channel = bot.get_channel(879291076706451506)
+    channel = bot.get_channel(ch_id)
     print(channel.is_nsfw())
     datetime_TW = datetime.now(pytz.timezone('Asia/Taipei'))
-    current_time = datetime_TW.strftime("%H:%M")
-    print("Current Time =", current_time)
+    today_TW=datetime_TW.date()
+    Current_Time=datetime_TW.strftime("%H:%M")
+    print("Current Time =", Current_Time)
+    remaindays=sheepbd-today_TW
 
-    if (current_time == '19:07'):  # check if matches with the desired time
-        global remaindays
+    if (Current_Time == '00:00'):  # check if matches with the desired time
         chname=""
-        if (remaindays > 0):
-            remaindays -= 1
-            chname = "🦙再" + str(remaindays) + "天單身23年"
+        if (remaindays.days >= 0):
+            chname = "🦙再" + str(remaindays.days) + "天單身23年"
         else:
             chname = "恭喜🦙又老了一歲"
         await channel.edit(name=chname)
+        print("chname=%d",chname)
 
 @checkTime.before_loop
 async def before_checkTime():

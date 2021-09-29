@@ -25,27 +25,29 @@ starter_encouragements = ["咩咩背著羊娃娃", "Nooooo", "Wow!"]
 from datetime import datetime, date
 import pytz
 from discord.ext import commands, tasks
-
-bot = commands.Bot(command_prefix=".")
-id=879291076706451506
+client=discord.Client()
+ch_id=879288777804251177
 sheepbd=date(2021, 10, 11)
 
 @tasks.loop(seconds=60)
 async def checkTime():
-    channel = bot.get_channel(id)
-    print(channel.is_nsfw())
+    channel = bot.get_channel(ch_id)
     datetime_TW = datetime.now(pytz.timezone('Asia/Taipei'))
     today_TW=datetime_TW.date()
     Current_Time=datetime_TW.strftime("%H:%M")
     print("Current Time =", Current_Time)
     remaindays=sheepbd-today_TW
 
-    if (Current_Time == '12:56'):  # check if matches with the desired time
+    if (Current_Time == '00:00'):  # check if matches with the desired time
         chname=""
-        if (remaindays.days >= 0):
+        if (remaindays.days > 0):
             chname = "🦙再" + str(remaindays.days) + "天單身23年"
-        else:
+        elif(remaindays.days == 0):
             chname = "恭喜🦙又老了一歲"
+            await channel.send("咩咩生日快樂 恭喜又老了一歲")
+        else:
+            chname= "🦙今年24 徵友中"
+            
         await channel.edit(name=chname)
         print("chname=%d",chname)
 
