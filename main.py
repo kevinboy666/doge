@@ -44,6 +44,8 @@ async def checkTime():
             chname = "🦙再" + str(remaindays.days) + "天單身23年"
         elif(remaindays.days == 0):
             chname = "恭喜🦙又老了一歲"
+            pic="https://www.arboretum.ie/wp-content/uploads/2021/06/Lamb_Cutlets.jpg"
+            await channel.send(pic)
             await channel.send("咩咩生日快樂 恭喜又老了一歲")
         else:
             chname= "🦙今年24 徵友中"
